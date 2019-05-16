@@ -76,7 +76,7 @@ def load_tf_weights_in_bert(model, tf_checkpoint_path):
         name = name.split('/')
         # adam_v and adam_m are variables used in AdamWeightDecayOptimizer to calculated m and v
         # which are not required for using pretrained model
-        if any(n in ["adam_v", "adam_m", "global_step"] for n in name):
+        if any(n in ["adam_v", "adam_m", "global_step", "output_bias", "output_weights"] for n in name):
             print("Skipping {}".format("/".join(name)))
             continue
         pointer = model
@@ -87,12 +87,8 @@ def load_tf_weights_in_bert(model, tf_checkpoint_path):
                 l = [m_name]
             if l[0] == 'kernel' or l[0] == 'gamma':
                 pointer = getattr(pointer, 'weight')
-            elif l[0] == 'output_bias':
-                pointer = getattr(pointer, 'bias')
             elif l[0] == 'beta':
                 pointer = getattr(pointer, 'bias')
-            elif l[0] == 'output_weights':
-                pointer = getattr(pointer, 'output_weights')
             elif l[0] == 'squad':
                 pointer = getattr(pointer, 'classifier')
             else:

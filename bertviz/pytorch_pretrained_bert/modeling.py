@@ -88,7 +88,7 @@ def load_tf_weights_in_bert(model, tf_checkpoint_path):
             if l[0] == 'kernel' or l[0] == 'gamma':
                 pointer = getattr(pointer, 'weight')
             elif l[0] == 'beta':
-                pointer = getattr(pointer, 'bias')
+                pointer = getattr(pointer, 'beta')
             elif l[0] == 'squad':
                 pointer = getattr(pointer, 'classifier')
             else:

@@ -107,6 +107,8 @@ def load_tf_weights_in_bert(model, tf_checkpoint_path):
             array = np.transpose(array)
         try:
             assert pointer.shape == array.shape
+        except AttributeError:
+            pass
         except AssertionError as e:
             e.args += (pointer.shape, array.shape)
             raise

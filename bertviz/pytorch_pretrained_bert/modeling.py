@@ -85,18 +85,19 @@ def load_tf_weights_in_bert(model, tf_checkpoint_path):
                 l = re.split(r'_(\d+)', m_name)
             else:
                 l = [m_name]
-            if l[0] == 'kernel' or l[0] == 'gamma':
-                pointer = getattr(pointer, 'weight')
-            elif l[0] == 'beta':
-                pointer = getattr(pointer, 'bias')
-            elif l[0] == 'squad':
-                pointer = getattr(pointer, 'classifier')
-            else:
-                try:
+            try: 
+                if l[0] == 'kernel' or l[0] == 'gamma':
+                    pointer = getattr(pointer, 'weight')
+                elif l[0] == 'beta':
+                    pointer = getattr(pointer, 'bias')
+                elif l[0] == 'squad':
+                    pointer = getattr(pointer, 'classifier')
+                else:
                     pointer = getattr(pointer, l[0])
-                except AttributeError:
-                    print("Skipping {}".format("/".join(name)))
-                    continue
+            except AttributeError:
+                print("Skipping {}".format("/".join(name)))
+                continue
+                
             if len(l) >= 2:
                 num = int(l[1])
                 pointer = pointer[num]

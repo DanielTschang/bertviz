@@ -407,13 +407,15 @@ class BertEncoder(nn.Module):
 
     def forward(self, hidden_states, attention_mask, output_all_encoded_layers=True):
         all_encoder_layers = []
+        attn_data_list = []
         for layer_module in self.layer:
-            hidden_states = layer_module(hidden_states, attention_mask)
+            hidden_states, attn_data = layer_module(hidden_states, attention_mask)
+            attn_data_list.append(attn_data)
             if output_all_encoded_layers:
                 all_encoder_layers.append(hidden_states)
         if not output_all_encoded_layers:
             all_encoder_layers.append(hidden_states)
-        return all_encoder_layers
+        return all_encoder_layers, attn_data_list
 
 
 class BertPooler(nn.Module):
